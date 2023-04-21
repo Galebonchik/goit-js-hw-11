@@ -10,6 +10,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 const wordInput  = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.buttonLoadMore');
+const arrow = document.querySelector('.icons');
 let query = '';
 let page = 1;
 let simpleLightBox;
@@ -87,11 +88,11 @@ function showLoadMorePage() {
 window.addEventListener('scroll', showLoadMorePage);
 
 // кнопка “вгору”->
-arrowTop.onclick = function () {
+arrow.onclick = function () {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   // після scrollTo відбудеться подія "scroll", тому стрілка автоматично сховається
 };
 
 window.addEventListener('scroll', function () {
-  arrowTop.hidden = scrollY < document.documentElement.clientHeight;
+  arrow.hidden = scrollY < document.documentElement.clientHeight;
 });
