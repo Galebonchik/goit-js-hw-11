@@ -33,9 +33,9 @@ function inputHandler(event) {
       if (data.totalHits === 0 || query === '' ) {
         Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.", { fontSize: '15px', timeout: 5000 },);
       } else {
-          downloadGallery(data.hits);
+          downloadGallery( data.hits);
           simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-        Notiflix.Notify.info("Hooray! We found ${data.totalHits} images.", { fontSize: '15px', timeout: 5000 },);
+        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`, { fontSize: '15px', timeout: 5000 },);
 
         if (data.totalHits > perPage) {
           buttonLoadMore.classList.remove('is-hidden');
@@ -70,12 +70,28 @@ function onButtonLoadMore() {
 wordInput.addEventListener('submit', inputHandler);
 buttonLoadMore.addEventListener('click', onButtonLoadMore);
 
-smoothscroll.polyfill();
-const { height: cardHeight } = document
-  .querySelector(".gallery")
-  .firstElementChild.getBoundingClientRect();
+function checkIfEndOfPage() {
+  return (
+    window.innerHeight + window.pageYOffset >=
+    document.documentElement.scrollHeight );
+}
 
-window.scrollBy({
-  top: cardHeight * 2,
-  behavior: "smooth",
+// Функція, яка виконуеться, якщо користувач дійшов до кінця сторінки
+function showLoadMorePage() {
+  if (checkIfEndOfPage()) {
+    onButtonLoadMore();
+  }
+}
+
+// Додати подію на прокручування сторінки, яка викликає функцію showLoadMorePage
+window.addEventListener('scroll', showLoadMorePage);
+
+// кнопка “вгору”->
+arrowTop.onclick = function () {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // після scrollTo відбудеться подія "scroll", тому стрілка автоматично сховається
+};
+
+window.addEventListener('scroll', function () {
+  arrowTop.hidden = scrollY < document.documentElement.clientHeight;
 });
